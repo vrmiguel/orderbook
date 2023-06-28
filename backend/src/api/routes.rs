@@ -14,6 +14,7 @@ use crate::{
     Result,
 };
 
+/// Inserts a new order into the storage
 async fn insert_order(
     storage: &OrderStorage,
     partial_order: PartialOrder,
@@ -29,8 +30,8 @@ async fn insert_order(
 }
 
 #[instrument(skip(storage))]
-#[get("/orders")]
-async fn list_all(
+#[get("")]
+pub async fn list_all(
     storage: web::Data<OrderStorage>,
 ) -> Result<Json<ListAllOrdersResponse>> {
     let orders = storage.list_all().await;
@@ -41,7 +42,7 @@ async fn list_all(
 }
 
 #[instrument(skip(storage))]
-#[post("/orders/bids")]
+#[post("/bids")]
 pub async fn create_bid(
     web::Json(partial_order): web::Json<PartialOrder>,
     storage: web::Data<OrderStorage>,
@@ -53,7 +54,7 @@ pub async fn create_bid(
 }
 
 #[instrument(skip(storage))]
-#[post("/orders/asks")]
+#[post("/asks")]
 pub async fn create_ask(
     web::Json(partial_order): web::Json<PartialOrder>,
     storage: web::Data<OrderStorage>,

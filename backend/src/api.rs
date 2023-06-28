@@ -16,9 +16,10 @@ pub fn spawn_server(storage: OrderStorage) -> crate::Result<Server> {
         // cloning an Arc.
         let storage = storage.clone();
         App::new().service(
-            web::scope("/tasks")
+            web::scope("/orders")
                 .service(routes::create_ask)
                 .service(routes::create_bid)
+                .service(routes::list_all)
                 .app_data(Data::new(storage)),
         )
     })
