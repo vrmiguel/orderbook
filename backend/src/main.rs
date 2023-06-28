@@ -10,7 +10,7 @@ mod storage;
 pub use error::Result;
 use storage::OrderStorage;
 
-#[tokio::main]
+#[actix_web::main]
 async fn main() -> crate::Result<()> {
     // Start tracing
     tracing_subscriber::fmt().compact().init();

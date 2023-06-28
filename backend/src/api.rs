@@ -23,6 +23,8 @@ pub fn spawn_server(storage: OrderStorage) -> crate::Result<Server> {
                 .app_data(Data::new(storage)),
         )
     })
+    .workers(12)
+    .max_connections(50_000)
     .bind(("127.0.0.1", 8080))?
     .run();
 
