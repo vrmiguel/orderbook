@@ -15,13 +15,16 @@ pub fn spawn_server(storage: OrderStorage) -> crate::Result<Server> {
         // this within the closure. This is not a problem since we're just
         // cloning an Arc.
         let storage = storage.clone();
-        App::new().service(
-            web::scope("/orders")
-                .service(routes::create_ask)
-                .service(routes::create_bid)
-                .service(routes::list_all)
-                .app_data(Data::new(storage)),
-        )
+        let endpoints = web::scope("/orders")
+            .service(routes::create_ask)
+            .service(routes::create_bid)
+            .service(routes::list_all)
+            .app_data(Data::new(storage));
+
+        // TODO: CORS should only be permissive for debug builds
+        App::new()
+            .wrap(actix_cors::Cors::permissive())
+            .service(endpoints)
     })
     .workers(12)
     .max_connections(50_000)
