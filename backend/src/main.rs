@@ -4,13 +4,13 @@ mod api;
 mod error;
 /// The Order type and related functionality
 mod order;
-///
+/// Abstracts over
 mod storage;
 
 pub use error::Result;
 use storage::OrderStorage;
 
-#[actix_web::main]
+#[tokio::main]
 async fn main() -> crate::Result<()> {
     // Start tracing
     tracing_subscriber::fmt().compact().init();

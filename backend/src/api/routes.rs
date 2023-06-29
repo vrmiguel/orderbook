@@ -24,7 +24,7 @@ async fn insert_order(
 
     let order = Order::from_form(uuid, partial_order, order_side);
 
-    storage.insert(order).await;
+    storage.insert(order);
 
     OrderCreatedResponse { uuid }
 }

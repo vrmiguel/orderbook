@@ -2,8 +2,8 @@
 
 # Run 2000 concurrent workers each doing 500.000 requests
 hey \
-    -n 500000 \
-    -c 2000   \
+    -n 1500000 \
+    -c 200   \
     -m POST \
     -H 'Content-Type: application/json' \
     -H 'Accept: application/json, */*;q=0.5' \
