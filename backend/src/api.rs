@@ -21,10 +21,18 @@ pub fn spawn_server(storage: OrderStorage) -> crate::Result<Server> {
             .service(routes::list_all)
             .app_data(Data::new(storage));
 
-        // TODO: CORS should only be permissive for debug builds
-        App::new()
-            .wrap(actix_cors::Cors::permissive())
-            .service(endpoints)
+        if cfg!(debug_assertions) {
+            // Use permissive CORS headers for dev environments.
+            // Useful, for example, to test the frontend service locally.
+            App::new()
+                .wrap(actix_cors::Cors::permissive())
+                .service(endpoints)
+        } else {
+            // Use restrictive CORS headers for production environments
+            App::new()
+                .wrap(actix_cors::Cors::default())
+                .service(endpoints)
+        }
     })
     .workers(12)
     .max_connections(50_000)
