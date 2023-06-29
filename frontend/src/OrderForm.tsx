@@ -1,5 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { OrderSide } from './api';
+import './OrderForm.css';
 
 interface OrderFormProps {
     createOrder: (quantity: number, price: number, orderSide: OrderSide) => Promise<string>;
@@ -37,7 +38,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ createOrder }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="form-container">
             <label>
                 Quantity:
                 <input type="number" value={quantity} onChange={handleQuantityChange} />

@@ -1,0 +1,37 @@
+/* OrderForm.css */
+
+.form-container {
+    width: 300px;
+    margin: 0 auto;
+}
+
+.form-container label {
+    display: block;
+    margin-bottom: 8px;
+    /* Adjust the margin-bottom value */
+}
+
+.form-container input,
+.form-container select {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    /* Adjust the margin-bottom value */
+}
+
+.form-container button {
+    display: block;
+    margin-top: 0px;
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.form-container button:hover {
+    background-color: #45a049;
+}
