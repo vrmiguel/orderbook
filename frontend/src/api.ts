@@ -33,6 +33,20 @@ api.interceptors.request.use(
     }
 );
 
+// Response interceptors
+api.interceptors.response.use(
+    (response) => {
+        console.log('Response:', response.status, response.config.method?.toUpperCase(), response.config.url);
+        console.log('Response Data:', response.data);
+        return response;
+    },
+    (error) => {
+        console.error('Response Error:', error);
+        return Promise.reject(error);
+    }
+);
+
+
 export async function createOrder(quantity: number, price: number, orderSide: OrderSide): Promise<string> {
     const endpoint = orderSide === 'bid' ? '/orders/bids' : '/orders/asks';
     const requestBody = { quantity, price };
