@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getOrders, Order } from './api';
+import OrderCard from './OrderCard';
+import './OrderList.css';
 
 const OrderList: React.FC = () => {
     const [orders, setOrders] = useState<Order[]>([]);
@@ -17,22 +19,42 @@ const OrderList: React.FC = () => {
         fetchOrders();
     }, []);
 
+    const bidOrders = orders.filter((order) => order.side.toLowerCase() === 'bid');
+    const askOrders = orders.filter((order) => order.side.toLowerCase() === 'ask');
+
     return (
         <div>
             <h2>Orders</h2>
             {orders.length === 0 ? (
                 <p>No orders available.</p>
             ) : (
-                <ul>
-                    {orders.map((order) => (
-                        <li key={order.id}>
-                            Order ID: {order.id}, Quantity: {order.quantity}, Price: {order.price}, Side: {order.side}
-                        </li>
-                    ))}
-                </ul>
+                <div className="order-list-container">
+                    <div className="order-list-column">
+                        <h3>Bids</h3>
+                        {bidOrders.length === 0 ? (
+                            <p>No bid orders available.</p>
+                        ) : (
+                            bidOrders.map((order) => (
+                                <OrderCard key={order.id} order={order} />
+                            ))
+                        )}
+                    </div>
+                    <div className="order-list-column">
+                        <h3>Asks</h3>
+                        {askOrders.length === 0 ? (
+                            <p>No ask orders available.</p>
+                        ) : (
+                            askOrders.map((order) => (
+                                <OrderCard key={order.id} order={order} />
+                            ))
+                        )}
+                    </div>
+                </div>
             )}
         </div>
     );
 };
 
+
 export default OrderList;
+

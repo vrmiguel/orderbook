@@ -1,0 +1,8 @@
+.order-list-container {
+    display: flex;
+}
+
+.order-list-column {
+    flex: 1;
+    margin-right: 20px;
+}

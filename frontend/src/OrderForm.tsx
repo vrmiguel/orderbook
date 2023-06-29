@@ -6,12 +6,6 @@ interface OrderFormProps {
     createOrder: (quantity: number, price: number, orderSide: OrderSide) => Promise<string>;
 }
 
-interface Order {
-    quantity: number;
-    price: number;
-    side: 'bid' | 'ask';
-}
-
 const OrderForm: React.FC<OrderFormProps> = ({ createOrder }) => {
     const [quantity, setQuantity] = useState('');
     const [price, setPrice] = useState('');
