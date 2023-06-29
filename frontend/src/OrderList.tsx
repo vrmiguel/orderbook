@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { getOrders, Order } from './api';
+import { useState, useEffect } from 'react';
+import { Order, getOrders } from './api'; // Assuming you have an API function to fetch orders
 import OrderCard from './OrderCard';
 import './OrderList.css';
 
@@ -7,24 +7,31 @@ const OrderList: React.FC = () => {
     const [orders, setOrders] = useState<Order[]>([]);
 
     useEffect(() => {
-        const fetchOrders = async () => {
-            try {
-                const fetchedOrders = await getOrders();
-                setOrders(fetchedOrders);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
         fetchOrders();
     }, []);
+
+    const fetchOrders = async () => {
+        try {
+            const fetchedOrders = await getOrders();
+            setOrders(fetchedOrders);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const bidOrders = orders.filter((order) => order.side.toLowerCase() === 'bid');
     const askOrders = orders.filter((order) => order.side.toLowerCase() === 'ask');
 
+    const handleReload = () => {
+        fetchOrders();
+    };
+
     return (
         <div>
             <h2>Orders</h2>
+            <button onClick={handleReload}>
+                <i className="fas fa-sync-alt"></i> Reload
+            </button>
             {orders.length === 0 ? (
                 <p>No orders available.</p>
             ) : (
@@ -55,6 +62,4 @@ const OrderList: React.FC = () => {
     );
 };
 
-
 export default OrderList;
-
