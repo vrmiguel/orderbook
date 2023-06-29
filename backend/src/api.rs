@@ -39,5 +39,7 @@ pub fn spawn_server(storage: OrderStorage) -> crate::Result<Server> {
     .bind(("127.0.0.1", 8080))?
     .run();
 
+    tracing::info!("Server spawned!");
+
     Ok(server)
 }
