@@ -1,5 +1,10 @@
 # orderbook
 
+Example of an application with a backend in Rust (w/ `actix-web`) and a simplistic front-end in TypeScript with React.
+
+## Front-end
+
+See the corresponding [README](frontend/README.md);
 
 ## Back-end
 
