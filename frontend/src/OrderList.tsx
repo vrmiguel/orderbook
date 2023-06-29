@@ -26,14 +26,6 @@ const OrderList: React.FC = () => {
         fetchOrders();
     };
 
-    const handleNewBid = () => {
-        // Logic for creating a new bid order
-    };
-
-    const handleNewAsk = () => {
-        // Logic for creating a new ask order
-    };
-
     return (
         <div>
             <h2>Orders</h2>
@@ -46,7 +38,6 @@ const OrderList: React.FC = () => {
                 <div className="order-list-container">
                     <div className="order-list-column">
                         <h3>Bids</h3>
-                        <button onClick={handleNewBid}>New bid</button>
                         {bidOrders.length === 0 ? (
                             <p>No bid orders available.</p>
                         ) : (
@@ -57,7 +48,6 @@ const OrderList: React.FC = () => {
                     </div>
                     <div className="order-list-column">
                         <h3>Asks</h3>
-                        <button onClick={handleNewAsk}>New ask</button>
                         {askOrders.length === 0 ? (
                             <p>No ask orders available.</p>
                         ) : (
