@@ -67,3 +67,13 @@ export async function getOrders(): Promise<Order[]> {
         throw new Error(`Failed to fetch orders: ${error}.`);
     }
 }
+
+export async function deleteOrder(uuid: string): Promise<void> {
+    const requestBody = { uuid };
+
+    try {
+        await api.delete('/orders', { data: requestBody });
+    } catch (error) {
+        throw new Error(`Failed to fetch orders: ${error}.`);
+    }
+}

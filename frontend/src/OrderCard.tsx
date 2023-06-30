@@ -2,7 +2,16 @@ import React from "react";
 import { Order } from "./api";
 import "./OrderCard.css";
 
-const OrderCard: React.FC<{ order: Order }> = ({ order }) => {
+interface OrderCardProps {
+    order: Order;
+    onDeleteOrder: (orderId: string) => void;
+}
+
+const OrderCard: React.FC<OrderCardProps> = ({ order, onDeleteOrder }) => {
+    const handleDeleteOrder = () => {
+        onDeleteOrder(order.id);
+    };
+
     const formatPrice = (price: number) => {
         const formattedPrice = (price / 100).toFixed(2);
         return `USD ${formattedPrice}`;
@@ -20,6 +29,7 @@ const OrderCard: React.FC<{ order: Order }> = ({ order }) => {
             <div className="order-form-box">
                 <p>Total value: {formatPrice(order.price * order.quantity)}</p>
             </div>
+            <button onClick={handleDeleteOrder}>Cancel</button>
         </div>
     );
 };

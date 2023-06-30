@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Order, getOrders } from './api';
+import { Order, deleteOrder, getOrders } from './api';
 import OrderCard from './OrderCard';
 import './OrderList.css';
 
@@ -42,7 +42,7 @@ const OrderList: React.FC = () => {
                             <p>No bid orders available.</p>
                         ) : (
                             bidOrders.map((order) => (
-                                <OrderCard key={order.id} order={order} />
+                                <OrderCard key={order.id} order={order} onDeleteOrder={deleteOrder} />
                             ))
                         )}
                     </div>
@@ -52,7 +52,7 @@ const OrderList: React.FC = () => {
                             <p>No ask orders available.</p>
                         ) : (
                             askOrders.map((order) => (
-                                <OrderCard key={order.id} order={order} />
+                                <OrderCard key={order.id} order={order} onDeleteOrder={deleteOrder} />
                             ))
                         )}
                     </div>
