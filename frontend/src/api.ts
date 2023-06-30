@@ -46,8 +46,9 @@ api.interceptors.response.use(
     }
 );
 
-
-export async function createOrder(quantity: number, price: number, orderSide: OrderSide): Promise<string> {
+// Note: price arrives in here as a regular floating-point number.
+export async function createOrder(quantity: number, rawPrice: number, orderSide: OrderSide): Promise<string> {
+    const price = Math.round(rawPrice * 100);
     const endpoint = orderSide === 'bid' ? '/orders/bids' : '/orders/asks';
     const requestBody = { quantity, price };
 
