@@ -4,12 +4,12 @@ use actix_web::{
     App, HttpServer,
 };
 
-use crate::storage::OrderStorage;
+use crate::repository::in_memory::InMemoryStorage;
 
 pub mod forms;
 mod routes;
 
-pub fn spawn_server(storage: OrderStorage) -> crate::Result<Server> {
+pub fn spawn_server(storage: InMemoryStorage) -> crate::Result<Server> {
     let server = HttpServer::new(move || {
         // Due to `Fn` move semantics silliness we have to re-clone
         // this within the closure. This is not a problem since we're just

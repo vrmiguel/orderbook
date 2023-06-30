@@ -10,31 +10,30 @@ use crate::{
         ListAllOrdersResponse, OrderCreatedResponse, OrderToCancel,
         PartialOrder,
     },
-    error::Error,
     order::{Order, OrderSide},
-    storage::OrderStorage,
-    Result,
+    repository::OrderRepository,
+    InMemoryStorage, Result,
 };
 
 /// Utility function to insert a new order into the storage
-fn insert_order(
-    storage: &OrderStorage,
+async fn insert_order(
+    storage: &InMemoryStorage,
     partial_order: PartialOrder,
     order_side: OrderSide,
-) -> OrderCreatedResponse {
+) -> Result<OrderCreatedResponse> {
     let uuid = Uuid::new_v4();
 
     let order = Order::from_form(uuid, partial_order, order_side);
 
-    storage.insert(order);
+    storage.insert(order).await?;
 
-    OrderCreatedResponse { uuid }
+    Ok(OrderCreatedResponse { uuid })
 }
 
 #[instrument(skip(storage))]
 #[get("")]
 pub async fn list_all(
-    storage: web::Data<OrderStorage>,
+    storage: web::Data<InMemoryStorage>,
 ) -> Result<Json<ListAllOrdersResponse>> {
     let orders = storage.list_all().await;
 
@@ -47,9 +46,10 @@ pub async fn list_all(
 #[post("/bids")]
 pub async fn create_bid(
     web::Json(partial_order): web::Json<PartialOrder>,
-    storage: web::Data<OrderStorage>,
+    storage: web::Data<InMemoryStorage>,
 ) -> Result<Json<OrderCreatedResponse>> {
-    let response = insert_order(&storage, partial_order, OrderSide::Bid);
+    let response =
+        insert_order(&storage, partial_order, OrderSide::Bid).await?;
 
     Ok(Json(response))
 }
@@ -58,22 +58,23 @@ pub async fn create_bid(
 #[post("/asks")]
 pub async fn create_ask(
     web::Json(partial_order): web::Json<PartialOrder>,
-    storage: web::Data<OrderStorage>,
+    storage: web::Data<InMemoryStorage>,
 ) -> Result<Json<OrderCreatedResponse>> {
-    let response = insert_order(&storage, partial_order, OrderSide::Ask);
+    let response =
+        insert_order(&storage, partial_order, OrderSide::Ask).await?;
 
     Ok(Json(response))
 }
 
 #[instrument(skip(storage))]
-#[post("/asks")]
-pub async fn create_order(
+#[post("")]
+pub async fn cancel_order(
     web::Json(to_cancel): web::Json<OrderToCancel>,
-    storage: web::Data<OrderStorage>,
+    storage: web::Data<InMemoryStorage>,
 ) -> Result<Json<Order>> {
     let OrderToCancel { uuid } = to_cancel;
 
-    let removed_order = storage.remove(&uuid).ok_or(Error::NotFound)?;
+    let removed_order = storage.remove(&uuid).await?;
 
     Ok(Json(removed_order))
 }

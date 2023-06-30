@@ -4,17 +4,17 @@ mod api;
 mod error;
 /// The Order type and related functionality
 mod order;
-/// Abstracts over
-mod storage;
+/// Abstracts over storage for orders
+mod repository;
 
 pub use error::Result;
-use storage::OrderStorage;
+use repository::in_memory::InMemoryStorage;
 
 #[tokio::main]
 async fn main() -> crate::Result<()> {
     // Start tracing
     tracing_subscriber::fmt().compact().init();
-    let storage = OrderStorage::new();
+    let storage = InMemoryStorage::new();
 
     // Start our HTTP API
     let server = api::spawn_server(storage.clone())?;
