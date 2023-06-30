@@ -7,13 +7,22 @@ const OrderCard: React.FC<{ order: Order }> = ({ order }) => {
         const formattedPrice = (price / 100).toFixed(2);
         return `USD ${formattedPrice}`;
     };
+
     return (
         <div className="order-card">
-            <h3>Order ID: {order.id}</h3>
-            <p>Quantity: {order.quantity} units</p>
-            <p>Price: {formatPrice(order.price)}</p>
+            <div className="order-form-box">
+                <h3>Order ID: {order.id}</h3>
+            </div>
+            <div className="order-form-box">
+                <p>Quantity: {order.quantity} units</p>
+                <p>Price: {formatPrice(order.price)}</p>
+            </div>
+            <div className="order-form-box">
+                <p>Total value: {formatPrice(order.price * order.quantity)}</p>
+            </div>
         </div>
     );
 };
+
 
 export default OrderCard;

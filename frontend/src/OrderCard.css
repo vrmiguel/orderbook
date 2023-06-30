@@ -1,7 +1,33 @@
 .order-card {
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #f7f7f7;
     padding: 10px;
-    margin-bottom: 10px;
-    background-color: #f9f9f9;
+}
+
+.order-form-box {
+    border: 1px solid #e2e2e2;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 2px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+.order-form-box:last-child {
+    margin-bottom: 0;
+}
+
+.order-form-box h3 {
+    margin-top: 0;
+    font-size: 18px;
+    color: #333333;
+}
+
+.order-form-box p {
+    margin-bottom: 0px;
+    font-size: 16px;
+    color: #666666;
 }
