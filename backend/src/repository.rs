@@ -1,6 +1,7 @@
 use uuid::Uuid;
 
 pub mod in_memory;
+pub mod redis;
 
 use crate::{order::Order, Result};
 
@@ -13,5 +14,5 @@ pub trait OrderRepository {
     async fn list_all(&self) -> Result<Vec<Order>>;
 
     /// Remove an order given its UUID
-    async fn remove(&self, id_to_remove: &Uuid) -> Result<Order>;
+    async fn remove(&self, id_to_remove: &Uuid) -> Result;
 }

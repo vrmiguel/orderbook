@@ -18,3 +18,6 @@ uuid = { version = "1.4.0", features = ["serde", "v4"] }
 rustc-hash = "1.1.0"
 dashmap = { version = "5.4.0" }
 actix-cors = "0.6.4"
+redis = { version = "0.23.0", default-features = false, features = ["sha1_smol", "tokio", "tokio-comp", "aio", "ahash", "script", "tokio-native-tls-comp"] }
+heapless = "0.7.16"
+bincode = "1.3.3"

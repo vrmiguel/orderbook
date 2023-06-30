@@ -1,4 +1,5 @@
 use actix_web::{http::StatusCode, ResponseError};
+use redis::RedisError;
 
 pub type Result<T = ()> = std::result::Result<T, Error>;
 
@@ -8,8 +9,12 @@ pub enum Error {
     Actix(#[from] actix_web::Error),
     #[error("IO error: {0}")]
     Io(#[from] std::io::Error),
+    #[error("Redis error: {0}")]
+    Redis(#[from] RedisError),
     #[error("Resource not found")]
     NotFound,
+    #[error("Bincode error: {0}")]
+    Bincode(#[from] bincode::Error),
 }
 
 impl ResponseError for Error {

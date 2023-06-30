@@ -13,6 +13,7 @@ use repository::in_memory::InMemoryStorage;
 #[tokio::main]
 async fn main() -> crate::Result<()> {
     // Start tracing
+
     tracing_subscriber::fmt().compact().init();
     let storage = InMemoryStorage::new();
 

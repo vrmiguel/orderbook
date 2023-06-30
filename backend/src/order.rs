@@ -1,9 +1,9 @@
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 use crate::api::forms::PartialOrder;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub enum OrderSide {
     Bid,
@@ -13,7 +13,7 @@ pub enum OrderSide {
 pub type Cents = usize;
 
 /// A bid or ask order for a single asset of a financial market.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Order {
     // TODO: remove UUID from here?
     /// Order's unique identifier

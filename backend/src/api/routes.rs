@@ -1,6 +1,7 @@
 use actix_web::{
     get, post,
     web::{self, Json},
+    HttpResponse,
 };
 use tracing::instrument;
 use uuid::Uuid;
@@ -71,10 +72,11 @@ pub async fn create_ask(
 pub async fn cancel_order(
     web::Json(to_cancel): web::Json<OrderToCancel>,
     storage: web::Data<InMemoryStorage>,
-) -> Result<Json<Order>> {
+) -> Result<HttpResponse> {
     let OrderToCancel { uuid } = to_cancel;
 
-    let removed_order = storage.remove(&uuid).await?;
+    storage.remove(&uuid).await?;
 
-    Ok(Json(removed_order))
+    // Return No-Content
+    Ok(HttpResponse::Ok().finish())
 }
