@@ -7,6 +7,7 @@ use crate::{order::Order, Result};
 
 pub type NamespacedId = heapless::Vec<u8, 24>;
 
+#[derive(Clone)]
 pub struct RedisClient {
     client: redis::Client,
 }
@@ -33,7 +34,7 @@ impl RedisClient {
         let mut buf = heapless::Vec::new();
 
         // Safety: this unwrap could never happen
-        buf.extend_from_slice(b"orderid-")
+        buf.extend_from_slice(b"orderid:")
             .and_then(|_| buf.extend_from_slice(uuid.as_bytes()))
             .unwrap();
 

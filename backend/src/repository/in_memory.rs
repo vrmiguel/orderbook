@@ -49,7 +49,12 @@ impl OrderRepository for InMemoryStorage {
 
     /// List all currently inserted orders
     async fn list_all(&self) -> Result<Vec<Order>> {
-        Ok(vec![])
+        let orders: Vec<_> =
+            self.inner.iter().map(|entry| *entry.value()).collect();
+
+        tracing::info!("Current order count: {}", orders.len());
+
+        Ok(orders)
     }
 
     /// Remove an order given its UUID
@@ -75,15 +80,5 @@ impl InMemoryStorage {
                 ),
             ),
         }
-    }
-
-    /// List all orders inserted so far
-    pub async fn list_all(&self) -> Vec<Order> {
-        let orders: Vec<_> =
-            self.inner.iter().map(|entry| *entry.value()).collect();
-
-        tracing::info!("Current order count: {}", orders.len());
-
-        orders
     }
 }

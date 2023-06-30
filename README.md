@@ -2,62 +2,43 @@
 
 Example of an application with a backend in Rust (w/ `actix-web`) and a simplistic front-end in TypeScript with React.
 
+## Back-end
+
+See the available endpoints, their accepted inputs and their responses in the backend's [README.md](backend/README.md).
+
+A simple load test is available. On a six-core Ryzen 5 5500U, the results are:
+
+```
+Summary:
+  Total:        21.4949 secs
+  Slowest:      0.0392 secs
+  Fastest:      0.0001 secs
+  Average:      0.0043 secs
+  Requests/sec: 69784.0314
+  
+  Total data:   70500000 bytes
+  Size/request: 70 bytes
+
+Latency distribution:
+  10% in 0.0001 secs
+  25% in 0.0002 secs
+  50% in 0.0015 secs
+  75% in 0.0039 secs
+  90% in 0.0070 secs
+  95% in 0.0094 secs
+  99% in 0.0138 secs
+
+Details (average, fastest, slowest):
+  DNS+dialup:   0.0000 secs, 0.0001 secs, 0.0392 secs
+  DNS-lookup:   0.0000 secs, 0.0000 secs, 0.0000 secs
+  req write:    0.0000 secs, 0.0000 secs, 0.0032 secs
+  resp wait:    0.0003 secs, 0.0000 secs, 0.0190 secs
+  resp read:    0.0023 secs, 0.0000 secs, 0.0354 secs
+
+Status code distribution:
+  [200] 1000000 responses
+```
+
 ## Front-end
 
 See the corresponding [README](frontend/README.md);
-
-## Back-end
-
-### Available endpoints
-
-#### `POST /orders/bids`: create a new bid order
-
-```bash
-$ echo '{"quantity": 2, "price": 3500}' | xh POST http://127.0.0.1:8080/orders/bids 
-HTTP/1.1 200 OK
-Content-Length: 47
-Content-Type: application/json
-
-{
-    "uuid": "c2e9ef83-46bf-4bf9-8cba-3fac6aeb04c7"
-}
-```
-
-#### `POST /orders/asks`: create a new ask order
-
-```bash
- echo '{"quantity": 5, "price": 35}' | xh POST http://127.0.0.1:8080/orders/asks
-HTTP/1.1 200 OK
-Content-Length: 47
-Content-Type: application/json
-
-{
-    "uuid": "e26bde4c-ca03-4328-82e4-d0c99c14bd1a"
-}
-```
-
-#### `GET /orders`: list all inserted orders
-
-```bash
-$ xh GET http://127.0.0.1:8080/orders
-HTTP/1.1 200 OK
-Content-Length: 180
-Content-Type: application/json
-
-{
-    "orders": [
-        {
-            "id": "e26bde4c-ca03-4328-82e4-d0c99c14bd1a",
-            "quantity": 5,
-            "price": 35,
-            "side": "ask"
-        },
-        {
-            "id": "c2e9ef83-46bf-4bf9-8cba-3fac6aeb04c7",
-            "quantity": 2,
-            "price": 3500,
-            "side": "bid"
-        }
-    ]
-}
-```

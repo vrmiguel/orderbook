@@ -8,17 +8,18 @@ mod order;
 mod repository;
 
 pub use error::Result;
-use repository::in_memory::InMemoryStorage;
+use repository::{in_memory::InMemoryStorage, redis::RedisClient};
 
 #[tokio::main]
 async fn main() -> crate::Result<()> {
     // Start tracing
 
-    tracing_subscriber::fmt().compact().init();
-    let storage = InMemoryStorage::new();
+    // tracing_subscriber::fmt().compact().init();
+    // let storage = InMemoryStorage::new();
+    let storage = RedisClient::connect("redis://127.0.0.1:6379")?;
 
     // Start our HTTP API
-    let server = api::spawn_server(storage.clone())?;
+    let server = api::spawn_server(storage)?;
 
     // Wait for the HTTP server to close
     server.await?;

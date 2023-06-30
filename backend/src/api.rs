@@ -4,12 +4,12 @@ use actix_web::{
     App, HttpServer,
 };
 
-use crate::repository::in_memory::InMemoryStorage;
+use crate::repository::{in_memory::InMemoryStorage, redis::RedisClient};
 
 pub mod forms;
 mod routes;
 
-pub fn spawn_server(storage: InMemoryStorage) -> crate::Result<Server> {
+pub fn spawn_server(storage: RedisClient) -> crate::Result<Server> {
     let server = HttpServer::new(move || {
         // Due to `Fn` move semantics silliness we have to re-clone
         // this within the closure. This is not a problem since we're just
@@ -19,6 +19,7 @@ pub fn spawn_server(storage: InMemoryStorage) -> crate::Result<Server> {
             .service(routes::create_ask)
             .service(routes::create_bid)
             .service(routes::list_all)
+            // .service(routes::can)
             .app_data(Data::new(storage));
 
         if cfg!(debug_assertions) {
