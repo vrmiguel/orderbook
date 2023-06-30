@@ -41,7 +41,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ createOrder }) => {
             </div>
             <div className="form-row">
                 <label>
-                    Price:
+                    Price (in USD cents):
                     <input type="number" value={price} onChange={handlePriceChange} />
                 </label>
             </div>
