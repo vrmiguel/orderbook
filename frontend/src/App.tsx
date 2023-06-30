@@ -6,7 +6,7 @@ import OrderList from './OrderList';
 
 function App() {
   return (
-    <div>
+    <div className="App">
       <OrderForm createOrder={createOrder} />
       <OrderList />
     </div>

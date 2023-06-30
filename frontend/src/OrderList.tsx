@@ -27,11 +27,11 @@ const OrderList: React.FC = () => {
     };
 
     return (
-        <div>
-            <h2>Orders</h2>
+        <div className='order-list-header'>
             <button onClick={handleReload}>
-                <i className="fas fa-sync-alt"></i> Reload
+                <i></i> Reload
             </button>
+
             {orders.length === 0 ? (
                 <p>No orders available.</p>
             ) : (

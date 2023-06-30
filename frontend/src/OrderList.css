@@ -24,10 +24,18 @@
     margin-bottom: 10px;
 }
 
-.reload-button {
-    margin-left: 10px;
+.order-list-header {
+    justify-content: center;
+    align-items: center;
+}
+
+.order-list-header button {
+    display: block;
+    margin-top: 0px;
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: white;
     border: none;
-    background: none;
-    color: #333;
+    border-radius: 4px;
     cursor: pointer;
 }

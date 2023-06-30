@@ -33,27 +33,31 @@ const OrderForm: React.FC<OrderFormProps> = ({ createOrder }) => {
 
     return (
         <form onSubmit={handleSubmit} className="form-container">
-            <label>
-                Quantity:
-                <input type="number" value={quantity} onChange={handleQuantityChange} />
-            </label>
-            <br />
-            <label>
-                Price:
-                <input type="number" value={price} onChange={handlePriceChange} />
-            </label>
-            <br />
-            <label>
-                Side:
-                <select value={side} onChange={handleSideChange}>
-                    <option value="bid">Bid</option>
-                    <option value="ask">Ask</option>
-                </select>
-            </label>
-            <br />
+            <div className="form-row">
+                <label>
+                    Quantity:
+                    <input type="number" value={quantity} onChange={handleQuantityChange} />
+                </label>
+            </div>
+            <div className="form-row">
+                <label>
+                    Price:
+                    <input type="number" value={price} onChange={handlePriceChange} />
+                </label>
+            </div>
+            <div className="form-row">
+                <label>
+                    Order side:
+                    <select value={side} onChange={handleSideChange}>
+                        <option value="bid">Bid</option>
+                        <option value="ask">Ask</option>
+                    </select>
+                </label>
+            </div>
             <button type="submit">Create Order</button>
         </form>
     );
+
 };
 
 export default OrderForm;
