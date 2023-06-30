@@ -60,7 +60,7 @@ impl OrderRepository for InMemoryStorage {
     /// Remove an order given its UUID
     async fn remove(&self, id_to_remove: &Uuid) -> Result<()> {
         self.inner
-            .remove(&id_to_remove)
+            .remove(id_to_remove)
             .map(|(_id, _order)| ())
             .ok_or(Error::NotFound)
     }

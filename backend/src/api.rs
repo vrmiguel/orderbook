@@ -1,3 +1,5 @@
+use std::borrow::Cow;
+
 use actix_web::{
     dev::Server,
     web::{self, Data},
@@ -11,6 +13,7 @@ mod routes;
 
 pub fn spawn_server(
     storage: SharedOrderRepositoryImpl,
+    (address, port): (Cow<'static, str>, u16),
 ) -> crate::Result<Server> {
     let server = HttpServer::new(move || {
         // Due to `Fn` move semantics silliness we have to re-clone
@@ -39,7 +42,7 @@ pub fn spawn_server(
     })
     .workers(12)
     .max_connections(50_000)
-    .bind(("127.0.0.1", 8080))?
+    .bind((&*address, port))?
     .run();
 
     tracing::info!("Server spawned!");

@@ -6,6 +6,15 @@ Run `nix-shell` to install the required dependencies (other than Cargo itself).
 
 Then compile the server with `cargo build --release`.
 
+## Running
+
+By default, the server will be bound to `http://127.0.0.1:8080`.
+This behavior is configurable through the `ADDRESS` and `PORT` environment variables, such as in:
+
+```bash
+ADDRESS='0.0.0.0' PORT=8000 cargo run --release
+```
+
 ## Available endpoints
 
 #### `POST /orders/bids`: create a new bid order
@@ -24,7 +33,7 @@ Content-Type: application/json
 #### `POST /orders/asks`: create a new ask order
 
 ```bash
- echo '{"quantity": 5, "price": 35}' | xh POST http://127.0.0.1:8080/orders/asks
+echo '{"quantity": 5, "price": 35}' | xh POST http://127.0.0.1:8080/orders/asks
 HTTP/1.1 200 OK
 Content-Length: 47
 Content-Type: application/json
@@ -58,4 +67,14 @@ Content-Type: application/json
         }
     ]
 }
+```
+
+#### `DELETE /orders`: delete a given order
+
+```bash
+ echo '{ "uuid": "6eed020a-1b64-4991-ad60-444015b15dfa" }' | xh DELETE http://127.0.0.1:8080/orders
+HTTP/1.1 200 OK
+Access-Control-Allow-Credentials: true
+Content-Length: 0
+Vary: Origin, Access-Control-Request-Method, Access-Control-Request-Headers
 ```
