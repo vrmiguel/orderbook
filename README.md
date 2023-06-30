@@ -1,6 +1,7 @@
 # orderbook
 
 Example of an application with a backend in Rust (w/ `actix-web`) and a simplistic front-end in TypeScript with React.
+Orders can be stored either in-memory, on a distributed sharded `HashMap` with low lock contention or in Redis, allowing for some level of persistence.
 
 ## Back-end
 
@@ -38,6 +39,10 @@ Details (average, fastest, slowest):
 Status code distribution:
   [200] 1000000 responses
 ```
+
+The code used for the result above is in commit e608916fa92ca816ac52f0b173a00f19809f8f0b.
+
+Using Redis, we got around 14k requests/sec.
 
 ## Front-end
 
