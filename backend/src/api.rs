@@ -21,7 +21,7 @@ pub fn spawn_server(
             .service(routes::create_ask)
             .service(routes::create_bid)
             .service(routes::list_all)
-            // .service(routes::can)
+            .service(routes::cancel_order)
             .app_data(Data::new(storage));
 
         if cfg!(debug_assertions) {

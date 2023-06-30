@@ -1,5 +1,5 @@
 use actix_web::{
-    get, post,
+    delete, get, post,
     web::{self, Json},
     HttpResponse,
 };
@@ -67,7 +67,7 @@ pub async fn create_ask(
 }
 
 #[instrument(skip(storage))]
-#[post("")]
+#[delete("")]
 pub async fn cancel_order(
     web::Json(to_cancel): web::Json<OrderToCancel>,
     storage: web::Data<SharedOrderRepositoryImpl>,
