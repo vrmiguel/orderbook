@@ -1,9 +1,14 @@
+use std::sync::Arc;
+
 use uuid::Uuid;
 
 pub mod in_memory;
 pub mod redis;
 
 use crate::{order::Order, Result};
+
+pub type SharedOrderRepositoryImpl =
+    Arc<dyn OrderRepository + Sync + Send>;
 
 #[async_trait::async_trait]
 pub trait OrderRepository {

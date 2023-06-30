@@ -12,13 +12,12 @@ use crate::{
         PartialOrder,
     },
     order::{Order, OrderSide},
-    repository::{redis::RedisClient, OrderRepository},
-    Result,
+    Result, SharedOrderRepositoryImpl,
 };
 
 /// Utility function to insert a new order into the storage
 async fn insert_order(
-    storage: &RedisClient,
+    storage: &SharedOrderRepositoryImpl,
     partial_order: PartialOrder,
     order_side: OrderSide,
 ) -> Result<OrderCreatedResponse> {
@@ -34,7 +33,7 @@ async fn insert_order(
 #[instrument(skip(storage))]
 #[get("")]
 pub async fn list_all(
-    storage: web::Data<RedisClient>,
+    storage: web::Data<SharedOrderRepositoryImpl>,
 ) -> Result<Json<ListAllOrdersResponse>> {
     let orders = storage.list_all().await?;
 
@@ -47,7 +46,7 @@ pub async fn list_all(
 #[post("/bids")]
 pub async fn create_bid(
     web::Json(partial_order): web::Json<PartialOrder>,
-    storage: web::Data<RedisClient>,
+    storage: web::Data<SharedOrderRepositoryImpl>,
 ) -> Result<Json<OrderCreatedResponse>> {
     let response =
         insert_order(&storage, partial_order, OrderSide::Bid).await?;
@@ -59,7 +58,7 @@ pub async fn create_bid(
 #[post("/asks")]
 pub async fn create_ask(
     web::Json(partial_order): web::Json<PartialOrder>,
-    storage: web::Data<RedisClient>,
+    storage: web::Data<SharedOrderRepositoryImpl>,
 ) -> Result<Json<OrderCreatedResponse>> {
     let response =
         insert_order(&storage, partial_order, OrderSide::Ask).await?;
@@ -71,7 +70,7 @@ pub async fn create_ask(
 #[post("")]
 pub async fn cancel_order(
     web::Json(to_cancel): web::Json<OrderToCancel>,
-    storage: web::Data<RedisClient>,
+    storage: web::Data<SharedOrderRepositoryImpl>,
 ) -> Result<HttpResponse> {
     let OrderToCancel { uuid } = to_cancel;
 

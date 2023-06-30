@@ -13,6 +13,7 @@ pub struct RedisClient {
 }
 
 impl RedisClient {
+    #[allow(unused)]
     pub fn connect(redis_address: &str) -> Result<Self> {
         let client = redis::Client::open(redis_address)?;
 

@@ -4,12 +4,14 @@ use actix_web::{
     App, HttpServer,
 };
 
-use crate::repository::{in_memory::InMemoryStorage, redis::RedisClient};
+use crate::SharedOrderRepositoryImpl;
 
 pub mod forms;
 mod routes;
 
-pub fn spawn_server(storage: RedisClient) -> crate::Result<Server> {
+pub fn spawn_server(
+    storage: SharedOrderRepositoryImpl,
+) -> crate::Result<Server> {
     let server = HttpServer::new(move || {
         // Due to `Fn` move semantics silliness we have to re-clone
         // this within the closure. This is not a problem since we're just
