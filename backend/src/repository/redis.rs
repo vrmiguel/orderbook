@@ -7,6 +7,24 @@ use crate::{order::Order, Result};
 
 pub type NamespacedId = heapless::Vec<u8, 24>;
 
+enum OrderCodec {}
+
+impl OrderCodec {
+    /// Encode an [`Order`] into bytes through [`bincode`].
+    fn encode(order: &Order) -> Result<[u8; 44]> {
+        let mut buf = [0_u8; 44];
+
+        bincode::serialize_into(&mut buf[..], order)?;
+
+        Ok(buf)
+    }
+
+    /// Decode an [`Order`] from bytes through [`bincode`].
+    fn decode(bytes: &[u8]) -> Result<Order> {
+        bincode::deserialize(bytes).map_err(Into::into)
+    }
+}
+
 #[derive(Clone)]
 pub struct RedisClient {
     client: redis::Client,
@@ -41,20 +59,6 @@ impl RedisClient {
 
         buf
     }
-
-    /// Encode an [`Order`] into bytes through [`bincode`].
-    fn encode_order(order: &Order) -> Result<[u8; 44]> {
-        let mut buf = [0_u8; 44];
-
-        bincode::serialize_into(&mut buf[..], order)?;
-
-        Ok(buf)
-    }
-
-    /// Decode an [`Order`] from bytes through [`bincode`].
-    fn decode_order(bytes: &[u8]) -> Result<Order> {
-        bincode::deserialize(bytes).map_err(Into::into)
-    }
 }
 
 #[async_trait::async_trait]
@@ -62,7 +66,7 @@ impl OrderRepository for RedisClient {
     async fn insert(&self, order: Order) -> Result {
         let mut conn = self.client.get_async_connection().await?;
         let namespaced_id = Self::namespaced_uuid(&order.id);
-        let encoded_order = Self::encode_order(&order)?;
+        let encoded_order = OrderCodec::encode(&order)?;
 
         redis::cmd("SET")
             .arg(namespaced_id.as_slice())
@@ -100,7 +104,7 @@ impl OrderRepository for RedisClient {
 
         orders
             .into_iter()
-            .map(|encoded| Self::decode_order(&encoded))
+            .map(|encoded| OrderCodec::decode(&encoded))
             .collect()
     }
 
@@ -114,5 +118,56 @@ impl OrderRepository for RedisClient {
             .await?;
 
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use std::assert_eq;
+
+    use uuid::Uuid;
+
+    use crate::{
+        order::{Order, OrderSide},
+        repository::redis::OrderCodec,
+    };
+
+    #[test]
+    fn encodes_orders_in_44_bytes() {
+        let order = Order {
+            id: Uuid::new_v4(),
+            quantity: 225_000_220_294,
+            price: usize::MAX,
+            side: OrderSide::Bid,
+        };
+        let serialized = bincode::serialize(&order).unwrap();
+
+        assert_eq!(bincode::serialized_size(&order).unwrap(), 44);
+        assert_eq!(serialized.len(), 44);
+        assert_eq!(
+            OrderCodec::encode(&order).unwrap().as_slice(),
+            &serialized
+        );
+    }
+
+    #[test]
+    fn encodes_and_decodes_orders_correctly() {
+        for idx in 0..5000 {
+            let order = Order {
+                id: Uuid::new_v4(),
+                quantity: fastrand::usize(50..9000) * idx,
+                price: fastrand::usize(100..5000) * idx,
+                side: if fastrand::bool() {
+                    OrderSide::Ask
+                } else {
+                    OrderSide::Bid
+                },
+            };
+
+            let encoded = OrderCodec::encode(&order).unwrap();
+            let decoded = OrderCodec::decode(&encoded).unwrap();
+
+            assert_eq!(decoded, order);
+        }
     }
 }
