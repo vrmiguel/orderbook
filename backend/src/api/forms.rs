@@ -19,6 +19,11 @@ pub struct PartialOrder {
     pub price: usize,
 }
 
+#[derive(Deserialize, Debug, Clone, Copy)]
+pub struct OrderToCancel {
+    pub uuid: uuid::Uuid,
+}
+
 #[derive(Serialize, Debug, Clone, Copy)]
 pub struct OrderCreatedResponse {
     pub uuid: uuid::Uuid,

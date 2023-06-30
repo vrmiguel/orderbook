@@ -7,15 +7,17 @@ use uuid::Uuid;
 
 use crate::{
     api::forms::{
-        ListAllOrdersResponse, OrderCreatedResponse, PartialOrder,
+        ListAllOrdersResponse, OrderCreatedResponse, OrderToCancel,
+        PartialOrder,
     },
+    error::Error,
     order::{Order, OrderSide},
     storage::OrderStorage,
     Result,
 };
 
-/// Inserts a new order into the storage
-async fn insert_order(
+/// Utility function to insert a new order into the storage
+fn insert_order(
     storage: &OrderStorage,
     partial_order: PartialOrder,
     order_side: OrderSide,
@@ -47,8 +49,7 @@ pub async fn create_bid(
     web::Json(partial_order): web::Json<PartialOrder>,
     storage: web::Data<OrderStorage>,
 ) -> Result<Json<OrderCreatedResponse>> {
-    let response =
-        insert_order(&storage, partial_order, OrderSide::Bid).await;
+    let response = insert_order(&storage, partial_order, OrderSide::Bid);
 
     Ok(Json(response))
 }
@@ -59,8 +60,20 @@ pub async fn create_ask(
     web::Json(partial_order): web::Json<PartialOrder>,
     storage: web::Data<OrderStorage>,
 ) -> Result<Json<OrderCreatedResponse>> {
-    let response =
-        insert_order(&storage, partial_order, OrderSide::Ask).await;
+    let response = insert_order(&storage, partial_order, OrderSide::Ask);
 
     Ok(Json(response))
+}
+
+#[instrument(skip(storage))]
+#[post("/asks")]
+pub async fn create_order(
+    web::Json(to_cancel): web::Json<OrderToCancel>,
+    storage: web::Data<OrderStorage>,
+) -> Result<Json<Order>> {
+    let OrderToCancel { uuid } = to_cancel;
+
+    let removed_order = storage.remove(&uuid).ok_or(Error::NotFound)?;
+
+    Ok(Json(removed_order))
 }
